@@ -4,14 +4,33 @@ build-backend = "maturin"
 
 [project]
 name = "rknn-convert"
+version = "0.1.0"
+description = "Command-line tool for converting ONNX, TF, and PyTorch models to RKNN format using rknn-toolkit2"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Boyd Johnson", email = "boyd@boundarybit.io" }
+]
 requires-python = ">=3.8"
 dependencies = [
     "rknn-toolkit2==2.3.2"
 ]
 classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
     "Programming Language :: Rust",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
 ]
-dynamic = ["version"]
+
 [tool.maturin]
 bindings = "bin"
