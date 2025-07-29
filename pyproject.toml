@@ -8,13 +8,9 @@ version = "0.1.0"
 description = "Command-line tool for converting ONNX, TF, and PyTorch models to RKNN format using rknn-toolkit2"
 readme = "README.md"
 license = { file = "LICENSE" }
-authors = [
-    { name = "Boyd Johnson", email = "boyd@boundarybit.io" }
-]
+authors = [{ name = "Boyd Johnson", email = "boyd@boundarybit.io" }]
 requires-python = ">=3.8"
-dependencies = [
-    "rknn-toolkit2==2.3.2"
-]
+dependencies = ["rknn-toolkit2==2.3.2", "setuptools<81"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -29,7 +25,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent"
+    "Operating System :: OS Independent",
 ]
 
 [tool.maturin]

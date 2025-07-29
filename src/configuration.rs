@@ -5,15 +5,16 @@ use pyo3::prelude::*;
 use pyo3::types::{PyDictMethods, PyList};
 use pyo3::{types::PyDict, PyResult, Python};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use validator::Validate;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Configuration {
     pub config: Config,
     pub model: ModelLoading,
+    pub build: Build,
+    pub export: ExportRknn,
 }
-
-use std::collections::HashMap;
-use validator::Validate;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Validate)]
 pub struct Config {
@@ -157,6 +158,7 @@ impl Config {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(tag = "model_type")]
 pub enum ModelLoading {
     Onnx(OnnxLoading),
 }
@@ -229,4 +231,45 @@ impl OnnxLoading {
 
         Ok(dict)
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Build {
+    /// Whether to quantize the model (default: true)
+    pub do_quantization: Option<bool>,
+
+    /// Path to dataset file for quantization (default: None)
+    pub dataset: Option<String>,
+
+    /// Batch size for inference (default: None)
+    pub rknn_batch_size: Option<u32>,
+
+    /// Enable automatic hybrid quantization (default: false)
+    pub auto_hybrid: Option<bool>,
+}
+
+impl Build {
+    pub fn to_pydict<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyDict>> {
+        let dict = PyDict::new(py);
+
+        macro_rules! set {
+            ($field:ident) => {
+                if let Some(ref val) = self.$field {
+                    dict.set_item(stringify!($field), val)?;
+                }
+            };
+        }
+
+        set!(do_quantization);
+        set!(dataset);
+        set!(rknn_batch_size);
+        set!(auto_hybrid);
+
+        Ok(dict)
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExportRknn {
+    pub export_path: String,
 }
