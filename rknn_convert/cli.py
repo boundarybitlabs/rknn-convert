@@ -2,7 +2,7 @@ import typer
 from pathlib import Path
 import rknn_convert_inner
 
-app = typer.Typer(help="A CLI that performs actions based on subcommands.")
+app = typer.Typer(help="A tool for converting ONNX,TF,PyTorch models to RKNN models")
 
 def validate_config_file(ctx: typer.Context, param: typer.CallbackParam, value: Path):
     if not value.exists():
@@ -14,7 +14,7 @@ def convert(
     config: Path = typer.Argument(..., help="Path to the TOML configuration file", callback=validate_config_file)
 ):
     """
-    Run the convert action.
+    Convert the model to RKNN format based on the TOML configuration file.
     """
 
     try:
@@ -27,7 +27,7 @@ def explain(
     config: Path = typer.Argument(..., help="Path to the TOML configuration file", callback=validate_config_file)
 ):
     """
-    Run the explain action.
+    Explain the model based on the TOML configuration file.
     """
 
     try:
