@@ -1,0 +1,14 @@
+[config]
+target_platform = "rk3588"
+
+
+[load]
+model_type = "Onnx"
+model = "model.onnx"
+
+[build]
+do_quantization = false
+
+[export]
+export_path = "model.rknn"
+
