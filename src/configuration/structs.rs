@@ -10,6 +10,7 @@ pub struct Configuration {
     pub config: ConfigConfig,
     pub load: LoadConfig,
     pub build: BuildConfig,
+    pub accuracy_analysis: Option<AccuracyAnalysisConfig>,
     pub export: ExportConfig,
 }
 
@@ -179,6 +180,33 @@ impl Default for BuildConfig {
             dataset: None,
             rknn_batch_size: None,
             auto_hybrid: Some(false),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, JsonSchema)]
+#[serde(default)]
+pub struct AccuracyAnalysisConfig {
+    /// Input file paths for accuracy analysis.
+    pub inputs: Vec<String>,
+
+    /// Directory where accuracy snapshots and analysis files are written.
+    pub output_dir: Option<String>,
+
+    /// Optional target hardware platform for board-side analysis.
+    pub target: Option<String>,
+
+    /// Optional target device ID.
+    pub device_id: Option<String>,
+}
+
+impl Default for AccuracyAnalysisConfig {
+    fn default() -> Self {
+        Self {
+            inputs: Vec::new(),
+            output_dir: None,
+            target: None,
+            device_id: None,
         }
     }
 }
