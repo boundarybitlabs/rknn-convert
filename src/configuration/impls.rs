@@ -1,7 +1,8 @@
 use {
     crate::{
         configuration::structs::{
-            BuildConfig, ConfigConfig, Configuration, LoadConfig, OnnxLoadConfig,
+            AccuracyAnalysisConfig, BuildConfig, ConfigConfig, Configuration, LoadConfig,
+            OnnxLoadConfig,
         },
         section::add_section,
     },
@@ -27,6 +28,11 @@ impl Configuration {
 
         // [build]
         add_section("build", &self.build);
+
+        // [accuracy_analysis]
+        if let Some(ref accuracy_analysis) = self.accuracy_analysis {
+            add_section("accuracy_analysis", accuracy_analysis);
+        }
 
         // [export]
         add_section("export", &self.export);
@@ -140,6 +146,32 @@ impl BuildConfig {
         set!(dataset);
         set!(rknn_batch_size);
         set!(auto_hybrid);
+
+        Ok(dict)
+    }
+}
+
+impl AccuracyAnalysisConfig {
+    pub fn should_run(&self) -> bool {
+        !self.inputs.is_empty()
+    }
+
+    pub fn to_pydict<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyDict>> {
+        let dict = PyDict::new(py);
+
+        dict.set_item("inputs", PyList::new(py, &self.inputs)?)?;
+
+        macro_rules! set {
+            ($field:ident) => {
+                if let Some(ref val) = self.$field {
+                    dict.set_item(stringify!($field), val)?;
+                }
+            };
+        }
+
+        set!(output_dir);
+        set!(target);
+        set!(device_id);
 
         Ok(dict)
     }

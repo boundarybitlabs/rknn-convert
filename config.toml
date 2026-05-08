@@ -9,6 +9,9 @@ model = "model.onnx"
 [build]
 do_quantization = false
 
+[accuracy_analysis]
+inputs = ["input.npy"]
+output_dir = "snapshot"
+
 [export]
 export_path = "model.rknn"
-

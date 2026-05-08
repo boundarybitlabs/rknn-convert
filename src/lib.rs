@@ -1,7 +1,10 @@
 use {
     crate::{
         configuration::structs::Configuration,
-        functions::{call_rknn_build, call_rknn_config, call_rknn_export, call_rknn_load_onnx},
+        functions::{
+            call_rknn_accuracy_analysis, call_rknn_build, call_rknn_config, call_rknn_export,
+            call_rknn_load_onnx,
+        },
     },
     pyo3::{exceptions::PyRuntimeError, prelude::*, BoundObject, Python},
     std::fs,
@@ -50,6 +53,7 @@ fn rust_convert_inner(path: String) -> Result<(), Box<dyn std::error::Error>> {
         }
 
         call_rknn_build(py, rknn.clone(), &config.build)?;
+        call_rknn_accuracy_analysis(py, rknn.clone(), config.accuracy_analysis.as_ref())?;
         call_rknn_export(py, rknn.clone(), &config.export)?;
         Ok::<_, Box<dyn std::error::Error>>(())
     })?;

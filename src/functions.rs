@@ -1,5 +1,7 @@
 use {
-    crate::configuration::structs::{BuildConfig, ConfigConfig, ExportConfig, OnnxLoadConfig},
+    crate::configuration::structs::{
+        AccuracyAnalysisConfig, BuildConfig, ConfigConfig, ExportConfig, OnnxLoadConfig,
+    },
     pyo3::{types::PyAnyMethods, Bound, PyAny, PyResult, Python},
 };
 
@@ -60,8 +62,35 @@ pub fn call_rknn_build(
     }
 }
 
-pub fn call_rknn_export(
+pub fn call_rknn_accuracy_analysis(
     py: Python<'_>,
+    rknn: Bound<'_, PyAny>,
+    accuracy_analysis: Option<&AccuracyAnalysisConfig>,
+) -> PyResult<()> {
+    let Some(accuracy_analysis) = accuracy_analysis else {
+        return Ok(());
+    };
+
+    if !accuracy_analysis.should_run() {
+        return Ok(());
+    }
+
+    let kwargs = accuracy_analysis.to_pydict(py)?;
+    let result = rknn.call_method("accuracy_analysis", (), Some(&kwargs))?;
+    let code: i32 = result.extract()?;
+
+    if code != 0 {
+        Err(pyo3::exceptions::PyRuntimeError::new_err(format!(
+            "rknn.accuracy_analysis failed with code {}",
+            code
+        )))
+    } else {
+        Ok(())
+    }
+}
+
+pub fn call_rknn_export(
+    _py: Python<'_>,
     rknn: Bound<'_, PyAny>,
     export: &ExportConfig,
 ) -> PyResult<()> {
