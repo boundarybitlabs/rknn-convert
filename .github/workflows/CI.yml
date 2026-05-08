@@ -129,7 +129,7 @@ jobs:
       # The `path` input specifies the directory where artifacts will be downloaded.
       # This will create directories like `rknn-convert-linux-x86_64`, `rknn-convert-linux-aarch64`, etc.
       - name: Download all wheels
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
 
@@ -165,7 +165,7 @@ jobs:
       # Used to generate artifact attestation
       attestations: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
