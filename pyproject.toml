@@ -10,7 +10,12 @@ readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Boyd Johnson", email = "boyd@boundarybit.io" }]
 requires-python = ">=3.8"
-dependencies = ["rknn-toolkit2==2.3.2", "setuptools<81", "typer>=0.16,<0.17"]
+dependencies = [
+    "onnx==1.16.1",
+    "rknn-toolkit2==2.3.2",
+    "setuptools<81",
+    "typer>=0.16,<0.17",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
