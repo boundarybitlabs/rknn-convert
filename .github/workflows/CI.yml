@@ -119,12 +119,6 @@ jobs:
           # Ubuntu 22.04 with Python 3.10 (ARM64)
           - os: ubuntu-22.04-arm64
             python: "3.10"
-          # Ubuntu 20.04 with Python 3.9 (AMD64)
-          - os: ubuntu-20.04
-            python: "3.9"
-          # Ubuntu 20.04 with Python 3.8 (AMD64)
-          - os: ubuntu-20.04
-            python: "3.8"
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
