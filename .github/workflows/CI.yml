@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           # Use a consistent name to make downloading easier later
-          name: wheels-linux-${{ matrix.platform.target }}
+          name: rknn-convert-linux-${{ matrix.platform.target }}
           path: dist
 
   # The original `musllinux` job to build wheels
@@ -72,7 +72,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v7
         with:
-          name: wheels-musllinux-${{ matrix.platform.target }}
+          name: rknn-convert-musllinux-${{ matrix.platform.target }}
           path: dist
 
   # The original `sdist` job
@@ -88,7 +88,7 @@ jobs:
       - name: Upload sdist
         uses: actions/upload-artifact@v7
         with:
-          name: wheels-sdist
+          name: rknn-convert-sdist
           path: dist
 
   # The new `test` job to download and test the built wheels
@@ -127,7 +127,7 @@ jobs:
 
       # Download all artifacts from the `linux` and `musllinux` jobs.
       # The `path` input specifies the directory where artifacts will be downloaded.
-      # This will create directories like `wheels-linux-x86_64`, `wheels-linux-aarch64`, etc.
+      # This will create directories like `rknn-convert-linux-x86_64`, `rknn-convert-linux-aarch64`, etc.
       - name: Download all wheels
         uses: actions/download-artifact@v4
         with:
@@ -136,10 +136,10 @@ jobs:
       - name: Install wheel
         run: |
           pip install \
-            --find-links artifacts/wheels-linux-x86_64 \
-            --find-links artifacts/wheels-linux-aarch64 \
-            --find-links artifacts/wheels-musllinux-x86_64 \
-            --find-links artifacts/wheels-musllinux-aarch64 \
+            --find-links artifacts/rknn-convert-linux-x86_64 \
+            --find-links artifacts/rknn-convert-linux-aarch64 \
+            --find-links artifacts/rknn-convert-musllinux-x86_64 \
+            --find-links artifacts/rknn-convert-musllinux-aarch64 \
                 --force-reinstall rknn-convert
 
       # Now, run your test command.
@@ -169,7 +169,7 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: "wheels-*/*"
+          subject-path: "rknn-convert-*/*"
       - name: Publish to PyPI
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: PyO3/maturin-action@v1
@@ -177,4 +177,4 @@ jobs:
           MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         with:
           command: upload
-          args: --non-interactive --skip-existing wheels-*/*
+          args: --non-interactive --skip-existing rknn-convert-*/*
