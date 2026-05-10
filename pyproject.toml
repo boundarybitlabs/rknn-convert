@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "rknn-convert"
-version = "0.1.1"
+version = "0.1.2"
 description = "Command-line tool for converting ONNX, TF, and PyTorch models to RKNN format using rknn-toolkit2"
 readme = "README.md"
 license = { file = "LICENSE" }
